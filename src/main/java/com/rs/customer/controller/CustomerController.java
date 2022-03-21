@@ -24,8 +24,8 @@ public class CustomerController {
     }
 
     @GetMapping("/status/{id}")
-    public Mono<Boolean> existCustomerById(@PathVariable("id") String customerId){
-        return customerService.existCustomerById(customerId);
+    public Mono<Boolean> existCustomerById(@PathVariable("id") Integer dniNumber){
+        return customerService.existCustomerByDni(dniNumber);
     }
 
     @GetMapping("/person/{dniNumber}")

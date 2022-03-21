@@ -33,8 +33,8 @@ public class CustomerService {
     }
     Predicate<String> typeCustomer = type-> type.equals("personal")||type.equals("business");
 
-    public Mono<Boolean> existCustomerById(String customerId){
-        return customerRepository.existsById(customerId);
+    public Mono<Boolean> existCustomerByDni(Integer dniNumber){
+        return customerRepository.existsByDni(dniNumber);
     }
 
     public Mono<Boolean> isVipCustomer(Integer dniNumber){
@@ -54,8 +54,5 @@ public class CustomerService {
         }
         return Mono.just(false);
     }
-
-
-
 
 }
