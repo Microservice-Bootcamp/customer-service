@@ -3,17 +3,17 @@ package com.rs.customer.controller;
 import com.rs.customer.entity.Customer;
 import com.rs.customer.service.CustomerService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 
+
 @Log4j2
 @RestController
 @RequestMapping("/user")
-public class CustomerController {
+public class CustomerController extends RuntimeException{
 
     @Autowired
     private CustomerService customerService;
@@ -29,19 +29,24 @@ public class CustomerController {
         return customerService.findCustomerByDni(numberDni);
     }
 
+
     @GetMapping("/status/{id}")
-    public Mono<Boolean> existCustomerById(@PathVariable("id") Integer dniNumber){
-        log.info("jaaa");
+    public Mono<Boolean> existCustomerById(@PathVariable("id") Integer dniNumber) {
         return customerService.existCustomerByDni(dniNumber);
     }
 
+    @GetMapping("/status/{id}")
+    public Mono<Boolean> existCustomerByIdUser(@PathVariable("id") Integer dniNumber) {
+        return customerService.existCustomerByDni(dniNumber);
+    }
 
+    @CircuitBreaker(name = "customerCB", fallbackMethod = "fallBackBoolean")
     @GetMapping("/person/{dniNumber}")
     public Mono<Boolean> isVipConsumer(@PathVariable("dniNumber") Integer dniNumber){
         return customerService.isVipCustomer(dniNumber);
     }
 
-
+    @CircuitBreaker(name = "customerCB", fallbackMethod = "fallBackBoolean")
     @GetMapping("/business/{dniNumber}")
     public Mono<Boolean> isVipBusiness(@PathVariable("dniNumber") Integer dniNumber){
         return customerService.isVipBusiness(dniNumber);
@@ -54,10 +59,10 @@ public class CustomerController {
         return Mono.just(customer);
     }
 
-    /*private Mono<Boolean> fallbackBoolean(@PathVariable("id") Integer dniNumber,Exception e){
-        log.error(e.getMessage() + " timeout for:"+dniNumber);
+    private Mono<Boolean> fallBackBoolean(@PathVariable("dniNumber") Integer dniNumber,Exception e){
+        log.info(e.getMessage());
         return Mono.just(false);
-    }*/
+    }
 
 
 }
