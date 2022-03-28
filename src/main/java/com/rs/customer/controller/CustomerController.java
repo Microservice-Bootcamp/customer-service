@@ -35,11 +35,6 @@ public class CustomerController extends RuntimeException{
         return customerService.existCustomerByDni(dniNumber);
     }
 
-    @GetMapping("/status/{id}")
-    public Mono<Boolean> existCustomerByIdUser(@PathVariable("id") Integer dniNumber) {
-        return customerService.existCustomerByDni(dniNumber);
-    }
-
     @CircuitBreaker(name = "customerCB", fallbackMethod = "fallBackBoolean")
     @GetMapping("/person/{dniNumber}")
     public Mono<Boolean> isVipConsumer(@PathVariable("dniNumber") Integer dniNumber){

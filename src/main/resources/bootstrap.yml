@@ -7,4 +7,5 @@ spring:
   cloud:
     config:
       enabled: true
-      uri: http://localhost:8090
+      uri: https://config-server-eureka.herokuapp.com
+      #uri: http://localhost:8090
